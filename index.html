@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>waterapple</title>
-  <!-- Cursive script font similar to the reference image -->
+  <!-- Water droplet favicon for the browser tab -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://w3.org' viewBox='0 0 64 64'><text y='52' font-size='52'>💧</text></svg>">
+  <!-- Cursive script font -->
   <link href="https://googleapis.com" rel="stylesheet">
   <style>
     * {
@@ -35,12 +37,39 @@
       gap: 32px;
     }
 
+    .brand-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .droplet-logo {
+      font-size: 2.8rem;
+      line-height: 1;
+      user-select: none;
+    }
+
     .logo {
       font-family: 'Pacifico', cursive;
       font-size: 3.4rem;
       color: #ffffff;
       letter-spacing: 0.5px;
       user-select: none;
+    }
+
+    .description {
+      color: #888888;
+      font-size: 0.95rem;
+      max-width: 460px;
+      line-height: 1.5;
     }
 
     /* Search / URL Bar */
@@ -242,7 +271,15 @@
 
   <!-- Home Screen -->
   <div id="home-view">
-    <div class="logo">waterapple</div>
+    <div class="brand-header">
+      <div class="brand-row">
+        <span class="droplet-logo">💧</span>
+        <div class="logo">waterapple</div>
+      </div>
+      <p class="description">
+        visit <span onclick="openSite('https://lnaxyd.sbs')" style="color: #38bdf8; cursor: pointer; text-decoration: underline;">lnaxyd.sbs</span> through the browser for more!
+      </p>
+    </div>
 
     <form class="search-box" id="search-form">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -257,7 +294,7 @@
       />
     </form>
 
-    <!-- 4 Shortcut Tiles (No Movies) -->
+    <!-- 4 Shortcut Tiles -->
     <div class="shortcuts">
       <div class="tile" onclick="openSite('https://wikipedia.org')">
         <div class="tile-icon" style="background: #222; color: #fff;">W</div>
@@ -290,12 +327,12 @@
         <button class="game-btn" onclick="openSite('https://play2048.co')">2048</button>
         <button class="game-btn" onclick="openSite('https://hextris.io')">Hextris</button>
         <button class="game-btn" onclick="openSite('https://chromedino.com')">Dino Run</button>
-        <button class="game-btn" onclick="openSite('https://mit.edu')">Scratch Games</button>
+        <button class="game-btn" onclick="openSite('https://scratch.mit.edu')">Scratch Games</button>
       </div>
     </div>
   </div>
 
-  <!-- Built-in Browser Viewer -->
+  <!-- Built-in Fullscreen Viewer -->
   <div id="viewer">
     <div class="viewer-bar">
       <button class="viewer-btn" onclick="closeViewer()">← Home</button>
@@ -306,7 +343,7 @@
     <iframe id="web-frame" src=""></iframe>
   </div>
 
-   <script>
+  <script>
     const homeView = document.getElementById('home-view');
     const viewer = document.getElementById('viewer');
     const webFrame = document.getElementById('web-frame');
@@ -333,8 +370,8 @@
     });
 
     function openSite(url) {
-      // If it's a local game file in your repo (doesn't start with http), load it inside the viewer
-      if (!url.startsWith('http://') && !url.startsWith('https://') && !url.includes('.com') && !url.includes('.org') && !url.includes('.io')) {
+      // Load local HTML game files from your repo directly inside the built-in viewer
+      if (!url.startsWith('http://') && !url.startsWith('https://') && !url.includes('.')) {
         webFrame.src = url;
         viewerAddress.value = url;
         homeView.style.display = 'none';
@@ -343,44 +380,36 @@
       }
 
       const formatted = formatInput(url);
-      if (!formatted) return;
-
-      // Open external sites in a clean about:blank tab so they don't get blocked by X-Frame-Options
-      const win = window.open('about:blank', '_blank');
-      if (win) {
-        win.document.body.style.margin = '0';
-        win.document.body.style.height = '100vh';
-        const iframe = win.document.createElement('iframe');
-        iframe.style.border = 'none';
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.src = formatted;
-        win.document.body.appendChild(iframe);
-      } else {
-        window.open(formatted, '_blank');
-      }
-    }
-
-    function closeViewer() {
-      viewer.classList.remove('active');
-      homeView.style.display = 'flex';
-      webFrame.src = '';
-    }
-
-    function reloadFrame() {
-      webFrame.src = webFrame.src;
-    }
-
-    function openExternal() {
-      if (viewerAddress.value) {
-        window.open(viewerAddress.value, '_blank');
-      }
-    }
-
-    function toggleGames() {
-      gamesSection.classList.toggle('active');
-    }
-  </script>
-
-</body>
-</html>
+Use code with caution.
+if (!formatted) return;
+// Open external sites in an about:blank tab so X-Frame-Options doesn't block them
+const win = window.open('about:blank', '_blank');
+if (win) {
+win.document.body.style.margin = '0';
+win.document.body.style.height = '100vh';
+const iframe = win.document.createElement('iframe');
+iframe.style.border = 'none';
+iframe.style.width = '100%';
+iframe.style.height = '100%';
+iframe.src = formatted;
+win.document.body.appendChild(iframe);
+} else {
+window.open(formatted, '_blank');
+}
+}
+function closeViewer() {
+viewer.classList.remove('active');
+homeView.style.display = 'flex';
+webFrame.src = '';
+}
+function reloadFrame() {
+webFrame.src = webFrame.src;
+}
+function openExternal() {
+if (viewerAddress.value) {
+window.open(viewerAddress.value, '_blank');
+}
+}
+function toggleGames() {
+gamesSection.classList.toggle('active');
+}
