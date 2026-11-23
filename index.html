@@ -370,14 +370,11 @@
       const formatted = isLocal ? url : formatInput(url);
       if (!formatted) return;
 
-      if (isLocal || formatted.includes('://google.com')) {
-        webFrame.src = formatted;
-        viewerAddress.value = formatted;
-        homeView.style.display = 'none';
-        viewer.classList.add('active');
-      } else {
-        window.open(formatted, '_blank');
-      }
+      // Always open inside the built-in waterapple viewer first
+      webFrame.src = formatted;
+      viewerAddress.value = formatted;
+      homeView.style.display = 'none';
+      viewer.classList.add('active');
     }
 
     function closeViewer() {
